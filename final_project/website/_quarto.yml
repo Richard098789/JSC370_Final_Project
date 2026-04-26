@@ -1,0 +1,35 @@
+project:
+  type: website
+  output-dir: _site
+
+execute:
+  freeze: auto
+
+website:
+  title: "JSC370 Final Project"
+  site-url: https://richard098789.github.io/JSC370_Final_Project/
+  repo-url: https://github.com/Richard098789/JSC370_Final_Project
+  issue-url: https://github.com/Richard098789/JSC370_Final_Project/issues
+  navbar:
+    left:
+      - text: Home
+        href: index.qmd
+      - text: Midterm analysis
+        href: midterm.qmd
+      - text: About
+        href: about.qmd
+    right:
+      - icon: github
+        href: https://github.com/Richard098789/JSC370_Final_Project
+        aria-label: GitHub repository
+  page-footer:
+    left: "JSC370 (Winter 2026)"
+    center: "Built with [Quarto](https://quarto.org)"
+    right: "Source on [GitHub](https://github.com/Richard098789/JSC370_Final_Project)"
+
+format:
+  html:
+    theme: cosmo
+    highlight-style: github
+    toc: true
+    css: styles.css

@@ -1,0 +1,78 @@
+---
+title: "Midterm analysis (mock)"
+subtitle: "Short Python + one-page Adzuna sample (full report: `final_project/midterm.qmd`)"
+format:
+  html:
+    toc: true
+    embed-resources: true
+jupyter: python3
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+**Note:** This page runs a **single** API request (first search page only). Set `ADZUNA_APP_ID` and `ADZUNA_APP_KEY` in your environment (or GitHub Actions secrets) to fetch live data; otherwise the chunk falls back to a placeholder table.
+
+## Introduction (mock)
+
+Placeholder: Canadian data-job postings and salary patterns (Adzuna API). The chunk below demonstrates a minimal fetch at render time.
+
+## One-page API sample
+
+```{python}
+import os
+
+import pandas as pd
+import requests
+
+app_id = os.environ.get("ADZUNA_APP_ID", "")
+app_key = os.environ.get("ADZUNA_APP_KEY", "")
+
+if app_id and app_key:
+    url = "https://api.adzuna.com/v1/api/jobs/ca/search/1"
+    params = {
+        "app_id": app_id,
+        "app_key": app_key,
+        "what": "data",
+        "results_per_page": 10,
+    }
+    response = requests.get(url, params=params, timeout=45)
+    response.raise_for_status()
+    payload = response.json()
+    rows = [
+        {
+            "title": job.get("title"),
+            "company": job.get("company", {}).get("display_name"),
+            "location": job.get("location", {}).get("display_name"),
+            "salary_min": job.get("salary_min"),
+            "salary_max": job.get("salary_max"),
+        }
+        for job in payload.get("results", [])
+    ]
+    sample_df = pd.DataFrame(rows)
+else:
+    sample_df = pd.DataFrame(
+        {
+            "title": ["Configure ADZUNA_APP_ID and ADZUNA_APP_KEY to load live results"],
+            "company": [""],
+            "location": [""],
+            "salary_min": [None],
+            "salary_max": [None],
+        }
+    )
+
+sample_df
+```
+
+## Preliminary results (mock)
+
+| Role (example) | Count (fake) |
+|----------------|--------------|
+| Data Analyst   | 120          |
+| Data Scientist | 90           |
+| Data Engineer  | 161          |
+
+## Summary (mock)
+
+Replace this page with your full Quarto document when you are ready to publish the full analysis.

@@ -1,0 +1,9 @@
+---
+title: "Home"
+---
+
+Welcome. This site hosts the **JSC370** final project materials, including the midterm analysis of Canadian data-job postings (Adzuna API).
+
+Use the navigation bar to open the **Midterm analysis** page or **About**.
+
+The [course repository](https://github.com/Richard098789/JSC370) contains source files, including `final_project/midterm.qmd` and this website under `final_project/website/`.
