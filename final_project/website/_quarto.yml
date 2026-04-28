@@ -7,6 +7,7 @@ execute:
 
 website:
   title: "JSC370 Final Project"
+  search: false
   site-url: https://richard098789.github.io/JSC370_Final_Project/
   repo-url: https://github.com/Richard098789/JSC370_Final_Project
   issue-url: https://github.com/Richard098789/JSC370_Final_Project/issues
@@ -14,10 +15,8 @@ website:
     left:
       - text: Home
         href: index.qmd
-      - text: Midterm analysis
-        href: midterm.qmd
-      - text: About
-        href: about.qmd
+      - text: Visualizations
+        href: vis.qmd
     right:
       - icon: github
         href: https://github.com/Richard098789/JSC370_Final_Project

@@ -1,0 +1,43 @@
+﻿"Consumer Price Index, monthly, not seasonally adjusted 1 2 3"
+"Frequency: Monthly"
+"Table: 18-10-0004-01 (formerly CANSIM 326-0020)"
+"Release date: 2026-04-20"
+"Geography: Canada, Province or territory, Census subdivision, Census metropolitan area, Census metropolitan area part"
+""
+""
+
+"Products and product groups 3 4","All-items"
+"Geography","March 2026"
+,"2002=100"
+"Canada","167.4"
+"Nova Scotia","172.4"
+"Halifax, Nova Scotia 5","171.1"
+"Quebec","164.3"
+"Québec, Quebec 5","162.7"
+"Montréal, Quebec 5","167.0"
+"Ontario","168.2"
+"Ottawa-Gatineau, Ontario part, Ontario/Quebec 5 6","169.8"
+"Toronto, Ontario 5","169.7"
+"Thunder Bay, Ontario 5","157.0"
+"Alberta","175.9"
+"Edmonton, Alberta 5","174.0"
+"Calgary, Alberta 5","179.0"
+"British Columbia","161.7"
+"Vancouver, British Columbia 5","164.7"
+"Victoria, British Columbia 5","158.7"
+
+
+
+
+Footnotes:
+1,"The Consumer Price Index (CPI) is not a cost-of-living index. The objective behind a cost-of-living index is to measure changes in expenditures necessary for consumers to maintain a constant standard of living. The idea is that consumers would normally switch between products as the price relationship of goods changes. If, for example, consumers get the same satisfaction from drinking tea as they do from coffee, then it is possible to substitute tea for coffee if the price of tea falls relative to the price of coffee. The cheaper of the interchangeable products may be chosen. We could compute a cost-of-living index for an individual if we had complete information about that person's taste and spending habits. To do this for a large number of people, let alone the total population of Canada, is impossible. For this reason, regularly published price indexes are based on the fixed-basket concept rather than the cost-of-living concept."
+2,"This table replaces table 18-10-0008-01 which was archived with the release of April 2007 data."
+3,"From April 2020 to November 2021, and from January 2022 to February 2022, certain sub-indexes and components thereof were imputed using special approaches in either one, or more months. The affected indexes include child care services; housekeeping services; air transportation; personal care services; recreational services; travel tours; spectator entertainment; use of recreational facilities and services; beer served in licensed establishments; wine served in licensed establishments, and liquor served in licensed establishments. The details of these treatments from April 2020 to March 2021 are provided in technical supplements available through the <a href="https://www150.statcan.gc.ca/n1/en/catalogue/62F0014M" rel="external noopener noreferrer" target="_blank">Prices Analytical Series (opens new window)</a>. Starting in April 2021, details and treatments are available upon request by contacting the <a href="mailto:statcan.cpddisseminationunit-dpcunitedediffusion.statcan@statcan.gc.ca" rel="external noopener noreferrer" target="_blank">Consumer Prices Division (opens new window)</a>."
+4,"The goods and services that make up the Consumer Price Index (CPI) are organized according to a hierarchical structure with the all-items CPI as the top level. Eight major components of goods and services make up the all-items CPI. They are food; shelter; household operations, furnishings and equipment; clothing and footwear; transportation; health and personal care; recreation, education and reading; and alcoholic beverages, tobacco products and recreational cannabis. These eight components are broken down into a varying number of sub-groups which are in turn broken down into other sub-groups. Indents are used to identify the components that make up each level of aggregation. For example, the eight major components appear with one indent relative to the all-items CPI to show that they are combined to obtain the all-items CPI. NOTE: Some items are recombined outside the main structure of the CPI to obtain special aggregates such as all-items excluding food and energy; energy; goods; services; or fresh fruit and vegetables. They are listed after the components of the main structure of the CPI following the last major component entitled alcoholic beverages, tobacco products and recreational cannabis."
+5,"With the introduction of the 1992 basket in January 1995, emphasis was shifted from city data to provincial data. City all-items series were continued since many users had come to rely on this service, but the method of calculation was changed. Shelter indexes are calculated for each city. This recognizes the importance of shelter in the basket, the significant and persistent differences in price movements between cities, and the availability of local data. For the other seven major components, the movement of the provincial counterpart is used except in the cases of Montréal, Toronto, and Vancouver, where a sub-provincial counterpart is used. The major components are aggregated using the city's expenditure pattern to arrive at each city's all-items index."
+6,"Formerly Ottawa (Ottawa-Gatineau, Ontario part), represents Ottawa only."
+
+
+
+"How to cite: Statistics Canada. Table 18-10-0004-01  Consumer Price Index, monthly, not seasonally adjusted"
+https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000401

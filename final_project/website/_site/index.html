@@ -26,10 +26,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -42,18 +38,6 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-60d4398d82fec002ccec76571ed06d15.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "navbar",
-  "copy-button": false,
-  "collapse-after": 3,
-  "panel-placement": "end",
-  "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -84,7 +68,6 @@ ul.task-list li input[type="checkbox"] {
     <span class="navbar-title">JSC370 Final Project</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -95,12 +78,8 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./midterm.html"> 
-<span class="menu-text">Midterm analysis</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="./vis.html"> 
+<span class="menu-text">Visualizations</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -120,8 +99,14 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#project-description" id="toc-project-description" class="nav-link active" data-scroll-target="#project-description">Project description</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Richard098789/JSC370_Final_Project/issues" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -145,11 +130,15 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome. This site hosts the <strong>JSC370</strong> final project materials, including the midterm analysis of Canadian data-job postings (Adzuna API).</p>
-<p>Use the navigation bar to open the <strong>Midterm analysis</strong> page or <strong>About</strong>.</p>
-<p>The <a href="https://github.com/Richard098789/JSC370">course repository</a> contains source files, including <code>final_project/midterm.qmd</code> and this website under <code>final_project/website/</code>.</p>
+<section id="project-description" class="level2">
+<h2 class="anchored" data-anchor-id="project-description">Project description</h2>
+<p>This project analyzes Canadian data-related job postings collected from the Adzuna API. The analysis focuses on salary differences across job role, province, and contract characteristics, and uses feature engineering plus machine learning to study how well salary can be predicted from posting attributes.</p>
+<p>The visualizations page contains interactive Plotly charts that summarize model performance and labour-market structure (role mix, geography, and salary distribution). The data workflow includes role classification from job titles, annualized salary midpoint conversion, province mapping from location text, and CPI-linked enrichment for downstream modeling.</p>
+<p><a href="https://github.com/Richard098789/JSC370_Final_Project/blob/main/final_project/JSC370Final.pdf">Download the report (PDF)</a></p>
+<p><a href="https://github.com/Richard098789/JSC370_Final_Project">View the GitHub repository</a></p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -560,7 +549,7 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
 <p>Built with <a href="https://quarto.org">Quarto</a></p>
-<div class="toc-actions"><ul><li><a href="https://github.com/Richard098789/JSC370_Final_Project/issues" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Richard098789/JSC370_Final_Project/issues" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>Source on <a href="https://github.com/Richard098789/JSC370_Final_Project">GitHub</a></p>
 </div>

@@ -1,5 +1,47 @@
 [
   {
+    "objectID": "vis.html",
+    "href": "vis.html",
+    "title": "Visualizations",
+    "section": "",
+    "text": "These two plots now follow the same preparation and plotting logic used in final.qmd.\n\n\n                            \n                                            \nXGBoost actual vs predicted salary. Points near the dashed 45-degree line indicate accurate predictions, while larger vertical gaps highlight jobs where predicted salary differs most from observed salary.\n\n\n\n\n                            \n                                            \nRole × province treemap. Rectangle area represents posting count and color encodes the median annual salary midpoint, allowing quick comparison of both market size and pay level across role-region combinations.\n\n\n\n\n                            \n                                            \nSalary distribution by classified role. Each box summarizes the interquartile range and median salary, while outlier points reveal unusually high or low postings within each role.\n\n\n\n\n                            \n                                            \nAverage salary trend over time by role. The monthly lines help compare whether role categories move together or diverge as posting dates progress.\n\n\n\n\n                            \n                                            \nInteractive summary table of role-level market statistics, including posting volume and median salary midpoint, to complement the graphical views with exact values."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
+    "section": "",
+    "text": "This project analyzes Canadian data-related job postings collected from the Adzuna API. The analysis focuses on salary differences across job role, province, and contract characteristics, and uses feature engineering plus machine learning to study how well salary can be predicted from posting attributes.\nThe visualizations page contains interactive Plotly charts that summarize model performance and labour-market structure (role mix, geography, and salary distribution). The data workflow includes role classification from job titles, annualized salary midpoint conversion, province mapping from location text, and CPI-linked enrichment for downstream modeling.\nDownload the report (PDF)\nView the GitHub repository"
+  },
+  {
+    "objectID": "index.html#project-description",
+    "href": "index.html#project-description",
+    "title": "Home",
+    "section": "",
+    "text": "This project analyzes Canadian data-related job postings collected from the Adzuna API. The analysis focuses on salary differences across job role, province, and contract characteristics, and uses feature engineering plus machine learning to study how well salary can be predicted from posting attributes.\nThe visualizations page contains interactive Plotly charts that summarize model performance and labour-market structure (role mix, geography, and salary distribution). The data workflow includes role classification from job titles, annualized salary midpoint conversion, province mapping from location text, and CPI-linked enrichment for downstream modeling.\nDownload the report (PDF)\nView the GitHub repository"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This website is generated with Quarto as a static site and is published to GitHub Pages from the gh-pages branch via GitHub Actions."
+  },
+  {
+    "objectID": "about.html#repository-layout",
+    "href": "about.html#repository-layout",
+    "title": "About",
+    "section": "Repository layout",
+    "text": "Repository layout\n\nfinal_project/midterm.qmd — source for the job-posting analysis (Python chunks).\nfinal_project/website/ — Quarto website project (_quarto.yml, pages, styles).\n\nThe Midterm analysis page is a mock with one live Adzuna request (first results page) when credentials are set. For GitHub Actions, add repository secrets ADZUNA_APP_ID and ADZUNA_APP_KEY; if they are missing, the page still renders using a placeholder table. Swap in your full report (e.g. include final_project/midterm.qmd) when you publish the complete analysis."
+  },
+  {
+    "objectID": "about.html#deploying",
+    "href": "about.html#deploying",
+    "title": "About",
+    "section": "Deploying",
+    "text": "Deploying\n\nIn the GitHub repo, enable Pages: Settings → Pages → Build and deployment → Source: GitHub Actions.\nPush to main to run .github/workflows/publish-quarto.yml, which renders this site and publishes to gh-pages.\n\nThe live site URL follows GitHub Pages for this repo: https://richard098789.github.io/JSC370/ (adjust if your username or repo name differs)."
+  },
+  {
     "objectID": "midterm.html",
     "href": "midterm.html",
     "title": "Midterm analysis (mock)",
@@ -33,33 +75,5 @@
     "title": "Midterm analysis (mock)",
     "section": "Summary (mock)",
     "text": "Summary (mock)\nReplace this page with your full Quarto document when you are ready to publish the full analysis."
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "This website is generated with Quarto as a static site and is published to GitHub Pages from the gh-pages branch via GitHub Actions."
-  },
-  {
-    "objectID": "about.html#repository-layout",
-    "href": "about.html#repository-layout",
-    "title": "About",
-    "section": "Repository layout",
-    "text": "Repository layout\n\nfinal_project/midterm.qmd — source for the job-posting analysis (Python chunks).\nfinal_project/website/ — Quarto website project (_quarto.yml, pages, styles).\n\nThe Midterm analysis page is a mock with one live Adzuna request (first results page) when credentials are set. For GitHub Actions, add repository secrets ADZUNA_APP_ID and ADZUNA_APP_KEY; if they are missing, the page still renders using a placeholder table. Swap in your full report (e.g. include final_project/midterm.qmd) when you publish the complete analysis."
-  },
-  {
-    "objectID": "about.html#deploying",
-    "href": "about.html#deploying",
-    "title": "About",
-    "section": "Deploying",
-    "text": "Deploying\n\nIn the GitHub repo, enable Pages: Settings → Pages → Build and deployment → Source: GitHub Actions.\nPush to main to run .github/workflows/publish-quarto.yml, which renders this site and publishes to gh-pages.\n\nThe live site URL follows GitHub Pages for this repo: https://richard098789.github.io/JSC370/ (adjust if your username or repo name differs)."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Home",
-    "section": "",
-    "text": "Welcome. This site hosts the JSC370 final project materials, including the midterm analysis of Canadian data-job postings (Adzuna API).\nUse the navigation bar to open the Midterm analysis page or About.\nThe course repository contains source files, including final_project/midterm.qmd and this website under final_project/website/."
   }
 ]

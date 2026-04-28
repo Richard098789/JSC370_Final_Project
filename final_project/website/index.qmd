@@ -2,8 +2,12 @@
 title: "Home"
 ---
 
-Welcome. This site hosts the **JSC370** final project materials, including the midterm analysis of Canadian data-job postings (Adzuna API).
+## Project description
 
-Use the navigation bar to open the **Midterm analysis** page or **About**.
+This project analyzes Canadian data-related job postings collected from the Adzuna API. The analysis focuses on salary differences across job role, province, and contract characteristics, and uses feature engineering plus machine learning to study how well salary can be predicted from posting attributes.
 
-The [course repository](https://github.com/Richard098789/JSC370) contains source files, including `final_project/midterm.qmd` and this website under `final_project/website/`.
+The visualizations page contains interactive Plotly charts that summarize model performance and labour-market structure (role mix, geography, and salary distribution). The data workflow includes role classification from job titles, annualized salary midpoint conversion, province mapping from location text, and CPI-linked enrichment for downstream modeling.
+
+[Download the report (PDF)](https://github.com/Richard098789/JSC370_Final_Project/blob/main/final_project/JSC370Final.pdf)
+
+[View the GitHub repository](https://github.com/Richard098789/JSC370_Final_Project)

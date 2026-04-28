@@ -1,0 +1,366 @@
+---
+title: "Visualizations"
+format:
+  html:
+    toc: true
+    page-layout: full
+jupyter: python3
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+These two plots now follow the same preparation and plotting logic used in `final.qmd`.
+
+```{python}
+import re
+import unicodedata
+import warnings
+
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from sklearn.metrics import mean_squared_error, make_scorer
+from sklearn.model_selection import GridSearchCV, train_test_split
+from xgboost import XGBRegressor
+
+warnings.filterwarnings("ignore")
+
+df = pd.read_csv("../data/data.csv")
+df["created"] = pd.to_datetime(df["created"], utc=True)
+if "id" in df.columns:
+    df = df.drop_duplicates(subset=["id"], keep="last")
+
+def classify_role(title):
+    if pd.isna(title) or not str(title).strip():
+        return "Other"
+    t = str(title)
+    if re.search(r"\bdata entry\b|\bclerk\b|\bworddata processing\b", t):
+        return "Data Entry"
+    if re.search(r"\bmanager\b|\bdirector\b|\bhead\b|\bsupervisor\b|\bteam lead\b|\blead\b", t):
+        return "Manager"
+    if re.search(r"\bscientist\b|\bdata science\b|\bdata sciences\b", t):
+        return "Data Scientist"
+    if re.search(r"\banalyst\b|\banalytics\b|\banalysis\b|\bbusiness intelligence\b|\bbi\b", t):
+        return "Data Analyst"
+    if re.search(r"\bengineer\b|\bengineering\b|\barchitect\b|\barchitecture\b|\bdataops\b|\bmlops\b", t):
+        return "Data Engineer"
+    if re.search(r"\bdeveloper\b|\bprogrammer\b|\betl\b|\bpower bi\b|\btableau\b", t):
+        return "Developer"
+    if "analytics" in t:
+        return "Data Analyst"
+    if "machine learning" in t or "ml" in t or "ai" in t:
+        return "Data Engineer"
+    return "Other"
+
+def get_province(loc):
+    if pd.isna(loc):
+        return None
+    loc = str(loc).lower()
+    if any(x in loc for x in ["ontario","toronto","markham","mississauga","north york","guelph","oakville","oshawa","pickering","concord","woodbridge","halton","durham","york region","waterloo region","ottawa","peel region"]):
+        return "Ontario"
+    if any(x in loc for x in ["british columbia","vancouver","victoria","abbotsford","revelstoke","fraser valley","saanichton","fort st. john"]):
+        return "British Columbia"
+    if any(x in loc for x in ["québec", "quebec", "montreal", "montréal, Québec"]):
+        return "Québec"
+    if any(x in loc for x in ["alberta", "calgary", "edmonton"]):
+        return "Alberta"
+    if any(x in loc for x in ["manitoba", "virden", "winnipeg"]):
+        return "Other Provinces"
+    if any(x in loc for x in ["nova scotia", "halifax"]):
+        return "Other Provinces"
+    if "canada" in loc:
+        return "Canada-unspecified"
+    return "Other Provinces"
+
+def convert_salary(x):
+    if pd.isna(x):
+        return np.nan
+    x = float(x)
+    if x < 100:
+        return x * 2080
+    if x < 400:
+        return x * 260
+    if x < 2000:
+        return x * 52
+    if x < 15000:
+        return x * 12
+    return x
+
+def get_seniority(title):
+    t = str(title).lower()
+    if "senior" in t or "sr" in t:
+        return True
+    if "lead" in t or "principal" in t:
+        return True
+    return False
+
+def normalize_text(x):
+    x = str(x).lower().strip()
+    x = unicodedata.normalize("NFKD", x)
+    x = "".join(c for c in x if not unicodedata.combining(c))
+    return x
+
+cpi_data = pd.DataFrame({
+    "place": ["Canada", "Nova Scotia", "Halifax", "Quebec", "Québec", "Montréal", "Ontario", "Ottawa", "Toronto", "Thunder Bay", "Alberta", "Edmonton", "Calgary", "British Columbia", "Vancouver", "Victoria", "Manitoba", "Winnipeg", "Newfoundland and Labrador", "New Brunswick"],
+    "cpi": [167.4, 172.4, 171.1, 164.3, 162.7, 167.0, 168.2, 169.8, 169.7, 157.0, 175.9, 174.0, 179.0, 161.7, 164.7, 158.7, 168.7, 168.4, 167.8, 167.6],
+})
+cpi_map = {normalize_text(row["place"]): row["cpi"] for _, row in cpi_data.iterrows()}
+
+def match_cpi_text(text):
+    text_norm = normalize_text(text)
+    for place, cpi in cpi_map.items():
+        if place in text_norm:
+            return cpi
+    return np.nan
+
+def get_cpi(row):
+    cpi = match_cpi_text(row.get("location_detail", ""))
+    if pd.isna(cpi):
+        cpi = match_cpi_text(row.get("location", ""))
+    if pd.isna(cpi):
+        cpi = cpi_map["canada"]
+    return cpi
+
+df_clean = df.dropna(subset=["salary_min"]).copy()
+df_clean["title_clean"] = (
+    df_clean["title"]
+    .str.lower()
+    .str.replace(r"\(.*?\)", "", regex=True)
+    .str.replace(r"[^a-z\s]", "", regex=True)
+    .str.strip()
+)
+df_clean["role"] = df_clean["title_clean"].apply(classify_role)
+df_clean["salary_max"] = df_clean["salary_max"].fillna(df_clean["salary_min"])
+df_clean["salary_mid"] = (df_clean["salary_min"] + df_clean["salary_max"]) / 2
+df_clean["salary_mid"] = df_clean["salary_mid"].apply(convert_salary)
+df_clean["is_permanent"] = df_clean["contract_type"].map({"permanent": 1, "contract": 0})
+df_clean["location_clean"] = df_clean["location"].fillna("").astype(str).str.lower().str.strip()
+df_clean["province"] = df_clean["location_clean"].apply(get_province)
+df_clean["is_senior"] = df_clean["title_clean"].apply(get_seniority)
+role_counts = df_clean["role"].value_counts()
+df_clean["role_demand"] = np.log1p(df_clean["role"].map(role_counts))
+
+major_cities = ["toronto", "vancouver", "montréal", "montreal", "calgary", "ottawa"]
+loc_detail = df_clean["location_detail"].fillna("").astype(str).str.lower()
+df_clean["is_major_city"] = loc_detail.apply(lambda x: any(city in x for city in major_cities))
+
+df_feat = df_clean.copy()
+df_feat["cpi"] = df_feat.apply(get_cpi, axis=1)
+CUTOFF = pd.Timestamp("2025-04-01", tz="UTC")
+df_feat = df_feat.loc[df_feat["created"] >= CUTOFF].copy()
+df_feat["missing_province"] = df_feat["province"] == "Canada-unspecified"
+
+target = "salary_mid"
+df_model = df_feat.copy()
+df_model = df_model.dropna(subset=[target, "role", "is_senior", "is_permanent", "cpi", "role_demand"])
+df_model["year"] = df_model["created"].dt.year
+df_model["month"] = df_model["created"].dt.month
+
+df_train, df_test = train_test_split(df_model, test_size=0.2, random_state=42)
+role_salary_map = df_train.groupby("role")[target].median()
+global_median = float(df_train[target].median())
+df_train["role_encoded"] = df_train["role"].map(role_salary_map)
+df_test["role_encoded"] = df_test["role"].map(role_salary_map)
+df_test["role_encoded"] = df_test["role_encoded"].fillna(global_median)
+df_train["role_encoded"] = np.log1p(df_train["role_encoded"])
+df_test["role_encoded"] = np.log1p(df_test["role_encoded"])
+
+features = ["role_encoded", "is_senior", "is_permanent", "is_major_city", "cpi", "role_demand", "year", "month", "missing_province"]
+X_train = df_train[features].copy()
+X_test = df_test[features].copy()
+y_train = np.log1p(df_train[target])
+y_test = np.log1p(df_test[target])
+
+def rmse_original_from_log(y_true_log, y_pred_log):
+    y_true = np.expm1(y_true_log)
+    y_pred = np.expm1(y_pred_log)
+    return np.sqrt(mean_squared_error(y_true, y_pred))
+
+rmse_original_scorer = make_scorer(rmse_original_from_log, greater_is_better=False)
+xgb_param_grid = {"n_estimators": [200, 300], "learning_rate": [0.025, 0.05, 0.1], "max_depth": [2, 4]}
+xgb = XGBRegressor(objective="reg:squarederror", gamma=0, colsample_bytree=0.8, min_child_weight=1, subsample=0.8, random_state=42, verbosity=0)
+xgb_cv = GridSearchCV(estimator=xgb, param_grid=xgb_param_grid, cv=5, scoring=rmse_original_scorer, n_jobs=-1)
+xgb_cv.fit(X_train, y_train)
+best_xgb = xgb_cv.best_estimator_
+y_pred_xgb_log = best_xgb.predict(X_test)
+y_pred_xgb = np.expm1(y_pred_xgb_log)
+```
+
+```{python}
+#| fig-cap: "XGBoost actual vs predicted salary. Points near the dashed 45-degree line indicate accurate predictions, while larger vertical gaps highlight jobs where predicted salary differs most from observed salary."
+prediction_df = pd.DataFrame({
+    "Actual Salary": np.expm1(y_test).values,
+    "Predicted Salary": y_pred_xgb,
+    "Role": df_test["role"].values
+})
+
+prediction_df["Absolute Error"] = (
+    prediction_df["Actual Salary"] - prediction_df["Predicted Salary"]
+).abs()
+
+fig_pred = px.scatter(
+    prediction_df,
+    x="Actual Salary",
+    y="Predicted Salary",
+    color="Role",
+    hover_data={
+        "Actual Salary": ":,.0f",
+        "Predicted Salary": ":,.0f",
+        "Absolute Error": ":,.0f",
+        "Role": True
+    },
+    title="XGBoost: Actual vs Predicted Salary",
+    opacity=0.75
+)
+
+fig_pred.update_traces(marker=dict(size=7))
+min_val = prediction_df[["Actual Salary", "Predicted Salary"]].min().min()
+max_val = prediction_df[["Actual Salary", "Predicted Salary"]].max().max()
+
+fig_pred.add_trace(
+    go.Scatter(
+        x=[min_val, max_val],
+        y=[min_val, max_val],
+        mode="lines",
+        name="Perfect Prediction",
+        line=dict(color="black", width=2, dash="dash")
+    )
+)
+
+fig_pred.update_layout(
+    height=800,
+    title_x=0.5,
+    xaxis_title="Actual Salary",
+    yaxis_title="Predicted Salary",
+    legend_title="Job Role"
+)
+fig_pred
+```
+
+```{python}
+#| fig-cap: "Role × province treemap. Rectangle area represents posting count and color encodes the median annual salary midpoint, allowing quick comparison of both market size and pay level across role-region combinations."
+agg_role_prov = (
+    df_feat.dropna(subset=["salary_mid", "role", "province"])
+    .groupby(["role", "province"], as_index=False)
+    .agg(
+        n=("salary_mid", "count"),
+        median_salary=("salary_mid", "median"),
+    )
+)
+
+fig_treemap = px.treemap(
+    agg_role_prov,
+    path=["role", "province"],
+    values="n",
+    color="median_salary",
+    color_continuous_scale="Viridis",
+    hover_name="province",
+    hover_data={
+        "role": True,
+        "n": True,
+        "median_salary": ":,.0f",
+    },
+    title="Postings by role and province (tile area = count; color = median salary)",
+)
+
+fig_treemap.update_layout(
+    height=850,
+    title_x=0.5,
+    margin=dict(t=60, l=10, r=10, b=10),
+    coloraxis_colorbar=dict(title="Median salary"),
+)
+fig_treemap.update_traces(
+    texttemplate="%{label}<br>%{value} jobs",
+    textfont_size=11,
+)
+fig_treemap
+```
+
+```{python}
+#| fig-cap: "Salary distribution by classified role. Each box summarizes the interquartile range and median salary, while outlier points reveal unusually high or low postings within each role."
+fig_role = px.box(
+    df_feat.dropna(subset=["salary_mid", "role"]),
+    x="role",
+    y="salary_mid",
+    color="role",
+    points="outliers",
+    hover_data=["title", "company", "province", "salary_mid"],
+    title="Salary Distribution by Job Role",
+    labels={"role": "Job Role", "salary_mid": "Annual salary midpoint (CAD)"},
+)
+fig_role.update_layout(
+    height=780,
+    title_x=0.5,
+    showlegend=False,
+    xaxis_tickangle=-25,
+)
+fig_role
+```
+
+```{python}
+#| fig-cap: "Average salary trend over time by role. The monthly lines help compare whether role categories move together or diverge as posting dates progress."
+trend_df = (
+    df_feat.dropna(subset=["salary_mid", "role", "created"])
+    .assign(month_period=lambda x: x["created"].dt.to_period("M").dt.to_timestamp())
+    .groupby(["month_period", "role"], as_index=False)["salary_mid"]
+    .mean()
+)
+
+fig_trend = px.line(
+    trend_df,
+    x="month_period",
+    y="salary_mid",
+    color="role",
+    markers=True,
+    title="Monthly Average Salary by Role",
+    labels={"month_period": "Month", "salary_mid": "Average annual salary midpoint (CAD)", "role": "Role"},
+)
+fig_trend.update_layout(height=780, title_x=0.5)
+fig_trend
+```
+
+```{python}
+#| fig-cap: "Interactive summary table of role-level market statistics, including posting volume and median salary midpoint, to complement the graphical views with exact values."
+role_summary = (
+    df_feat.dropna(subset=["role", "salary_mid"])
+    .groupby("role", as_index=False)
+    .agg(
+        postings=("salary_mid", "count"),
+        median_salary=("salary_mid", "median"),
+        mean_salary=("salary_mid", "mean"),
+    )
+    .sort_values("postings", ascending=False)
+)
+
+fig_table = go.Figure(
+    data=[
+        go.Table(
+            header=dict(
+                values=["<b>Role</b>", "<b>Postings</b>", "<b>Median Salary (CAD)</b>", "<b>Mean Salary (CAD)</b>"],
+                fill_color="#1f3b57",
+                font=dict(color="white", size=13),
+                align="center",
+            ),
+            cells=dict(
+                values=[
+                    role_summary["role"],
+                    role_summary["postings"].map("{:,.0f}".format),
+                    role_summary["median_salary"].map("{:,.0f}".format),
+                    role_summary["mean_salary"].map("{:,.0f}".format),
+                ],
+                align="center",
+                height=28,
+            ),
+        )
+    ]
+)
+fig_table.update_layout(
+    title="Role-Level Posting and Salary Summary",
+    height=520,
+    title_x=0.5,
+)
+fig_table
+```

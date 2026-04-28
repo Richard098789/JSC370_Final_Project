@@ -1,0 +1,65 @@
+import requests
+import pandas as pd
+
+
+APP_ID = "d34356b4"
+APP_KEY = "90420aa2d69109d0658ba473fbae9572"
+
+
+def area_to_location(area):
+    """Use 2nd item of Adzuna area hierarchy if present, else 1st."""
+    if area is None:
+        return None
+    if isinstance(area, (list, tuple)):
+        if len(area) >= 2:
+            return area[1]
+        if len(area) == 1:
+            return area[0]
+        return None
+    return area
+
+def area_to_city(area):
+    if area is None:
+        return None
+    if isinstance(area, (list, tuple)):
+        if len(area) >= 3:
+            return area[2]
+        elif len(area) == 2:
+            return area[1]
+        elif len(area) == 1:
+            return area[0]
+        return None
+    return area
+
+jobs = []
+num_pages = 101
+
+for page in range(1, num_pages):
+
+    url = f"https://api.adzuna.com/v1/api/jobs/ca/search/{page}"
+
+    params = {
+        "app_id": APP_ID,
+        "app_key": APP_KEY,
+        "what": "data",
+        "results_per_page": 50
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    for job in data["results"]:
+        jobs.append({
+    "id": job.get("id"),
+    "title": job.get("title"),
+    "company": job.get("company", {}).get("display_name"),
+    "location": area_to_location(job.get("location", {}).get("area")),
+    "location_detail": area_to_city(job.get("location", {}).get("area")),
+    "salary_min": job.get("salary_min"),
+    "salary_max": job.get("salary_max"),
+    "contract_type": job.get("contract_type"),
+    "category": job.get("category", {}).get("label"),
+    "created": job.get("created")
+})
+df = pd.DataFrame(jobs)
+df.to_csv("data/data.csv", index=False)
