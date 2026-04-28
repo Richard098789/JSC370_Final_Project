@@ -24,7 +24,7 @@ This project studies Canadian **data-related job postings** and **advertised sal
 |--------|-------------|
 | [Adzuna API](https://developer.adzuna.com/) | Job listings for Canada: title, company, location, salary range, contract type, posting time. Credentials are required for live API pulls. |
 | Analytic extract | Saved postings used in the report: [`final_project/data/data.csv`](final_project/data/data.csv) |
-| CPI (inflation) | Values are defined in the CPI table inside [`final_project/final.qmd`](final_project/final.qmd) and matched to postings via location text (`cpi_data`, `get_cpi`). |
+| [Statistique Canada](https://www.statcan.gc.ca/en/subjects-start/prices_and_price_indexes/consumer_price_indexes) | Values are defined in the CPI table inside [`final_project/data/cost_of_living.csv`](final_project/data/cost_of_living.csv)  |
 
 ---
 
